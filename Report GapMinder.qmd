@@ -1,0 +1,72 @@
+---
+title: "Report GapMinder"
+author: "Julius Müller"
+date: 06.Juni.2026
+format: html
+execute:
+  warning: false
+  message: false
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+library(tidyverse)
+library(here)
+library(gapminder)
+
+daten <- gapminder
+```
+
+## Ziel dieses Reports
+
+Dies ist mein erster Report in RStudio, der über Quarto eingegeben  und 
+anschließend auf GitHub veröffentlicht wird. Es handelt sich deswegen um einen
+Test, das Endprodukt soll allein zur Veranschaulichung dienen. Es geht darum 
+sich mit den Möglichkeiten von sowohl RStudio, Quarto als auch Git(Hub) vertraut 
+zu machen. Ich hoffe daraus weitere Vorteile für mein Studium der Politik-
+wissenschaften zu erlangen und mir später mein ausgesprochenes Ziel Doktor 
+zu werden, zu ermögliche.
+
+Im Veraluf dieses Dokuments soll anhand einer kleinen "Forschungsfrage", ein 
+Report enstehen. Das Endprodukt ist nicht ernst zu nehmen.
+
+## Die Forschungsfrage
+
+Die nachfolgenden Forschungsfrage wurde KI-generiert und soll mich dazu bringen,
+ihr deskriptiv zu folgen: Wie entwickelt sich die Lebenserwartung über Zeit 
+nach Kontinenten?
+
+## Die Daten
+
+Die Daten zur Ermittlung der Forschungsfrage kommen aus dem über RStudio 
+runterzuladeneden `gapminder` Datensatz. Dieser beinhaltet die Lebenserwartung 
+von `r n_distinct(daten$country)` Länder von `r min(daten$year)` bis `r max(daten$year)`.
+
+## Eine erste Übersicht über die Daten
+
+```{r}
+#| label: tabelle-kopf
+head(daten) |> 
+  knitr::kable()
+```
+
+## Wie entwickelt sich die Lebenserwartung über Zeit nach Kontinenten?
+
+```{r}
+#| label: Grafik
+
+daten |> 
+  group_by(continent, year) |> 
+  summarise(lebenserwartung = mean(lifeExp)) |> 
+  ggplot(aes(x = year, y = lebenserwartung, color = continent)) +
+  geom_line() +
+  labs(title = "Lebenserwartung über Zeit", x = "Jahr", y = "Lebenserwartung",
+       color = "Kontinent") + 
+  theme_minimal()
+```
+
+## Ergebnis
+
+Auf allen Kontinenten ist ein Anstieg der Lebenserwartung festzustellen.
